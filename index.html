@@ -50,8 +50,10 @@
     header {
       padding: 14px 16px 10px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       position: relative;
       z-index: 20;
       background: linear-gradient(180deg, rgba(18, 10, 34, 0.95), rgba(18, 10, 34, 0));
@@ -622,6 +624,14 @@
       display: block;
     }
 
+    /* Après la prise de vue, le cadre et les éléments d'aperçu ne doivent plus
+       se superposer à la photo finale : ils sont déjà intégrés dans le canvas. */
+    .photo-overlay.photo-captured .photo-frame,
+    .photo-overlay.photo-captured .photo-title,
+    .photo-overlay.photo-captured .photo-monsters {
+      display: none;
+    }
+
     .photo-overlay video,
     .photo-overlay canvas {
       width: 100%;
@@ -791,43 +801,267 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    /* ---- Ecran d'accueil ---- */
     .permission-blocker {
       position: fixed;
       inset: 0;
       z-index: 150;
-      background: var(--night-1);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 30px;
+      padding: 22px 18px 26px;
+      overflow: hidden;
+      background: #171021;
+      color: #f5eadc;
+    }
+
+    .permission-blocker::before {
+      content: '✦';
+      position: absolute;
+      top: 8%;
+      left: 9%;
+      color: rgba(255,138,43,.38);
+      font-size: 22px;
+      transform: rotate(-14deg);
+    }
+
+    .permission-blocker::after {
+      content: '✦';
+      position: absolute;
+      right: 10%;
+      bottom: 12%;
+      color: rgba(143,233,79,.3);
+      font-size: 17px;
+      transform: rotate(18deg);
+    }
+
+    .home-kicker {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 8px;
+      color: #bdb1c7;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
     }
 
     .permission-blocker h2 {
-      font-family: 'Creepster';
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-family: 'Creepster', cursive;
+      font-size: clamp(42px, 10vw, 56px);
+      line-height: .9;
+      font-weight: 400;
       color: var(--pumpkin);
-      font-size: 28px;
-      margin-bottom: 6px;
+      letter-spacing: .5px;
+      text-shadow: 2px 3px 0 #4a1a00;
     }
 
-    .permission-blocker p {
-      color: #c9bde0;
-      font-size: 14px;
-      max-width: 280px;
-      margin-bottom: 18px;
+    .home-subtitle {
+      position: relative;
+      z-index: 1;
+      max-width: 330px;
+      margin: 13px 0 18px;
+      color: #ded3e4;
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    .permission-blocker button {
-      padding: 13px 26px;
-      border: none;
-      border-radius: 12px;
+    .hunt-intro {
+      position: relative;
+      z-index: 1;
+      width: min(92vw, 460px);
+      padding: 18px 20px 17px;
+      background: #f1e6d2;
+      color: #251b29;
+      border-radius: 4px 6px 5px 4px;
+      box-shadow: 0 10px 0 rgba(0,0,0,.18), 0 18px 32px rgba(0,0,0,.25);
+      transform: rotate(-.45deg);
+      text-align: left;
+    }
+
+    .hunt-intro::before {
+      content: 'MODE D’EMPLOI';
+      display: block;
+      width: max-content;
+      margin: -29px 0 10px -5px;
+      padding: 5px 9px 4px;
+      background: var(--pumpkin);
+      color: #321400;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      transform: rotate(-2deg);
+      box-shadow: 2px 3px 0 rgba(0,0,0,.18);
+    }
+
+    .hunt-intro h3 {
+      margin: 0 0 9px;
+      font-family: 'Creepster', cursive;
+      font-size: clamp(27px, 7vw, 34px);
+      line-height: 1;
+      font-weight: 400;
+      color: #2b2030;
+      text-align: left;
+    }
+
+    .hunt-intro p {
+      margin: 0 0 8px;
+      color: #453848;
+      font-size: 12.2px;
+      line-height: 1.4;
+    }
+
+    .hunt-intro p:nth-of-type(2) {
+      margin-bottom: 11px;
+      color: #514254;
+    }
+
+    .hunt-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      margin: 0;
+      padding: 10px 0 9px;
+      list-style: none;
+      border-top: 1px dashed rgba(37,27,41,.25);
+      border-bottom: 1px dashed rgba(37,27,41,.25);
+    }
+
+    .hunt-steps li {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 25px;
+      color: #302432;
+      font-size: 10.8px;
+      line-height: 1.2;
+    }
+
+    .hunt-steps li:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .hunt-steps strong {
+      color: #49334f;
+      font-weight: 900;
+    }
+
+    .hunt-final {
+      margin: 11px 0 0 !important;
+      color: #2e242f !important;
+      font-size: 12px !important;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .permission-blocker #startBtn {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      padding: 14px 32px 13px;
+      min-height: 50px;
+      border: 2px solid #9ee55b;
+      border-radius: 5px;
       background: var(--toxic);
-      color: #12210a;
-      font-weight: 800;
-      font-size: 15px;
+      color: #18210f;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: 0 5px 0 #5b9d31;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
     }
 
+    .permission-blocker #startBtn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #5b9d31;
+    }
+
+    @media (max-width: 420px) {
+      .permission-blocker {
+        padding: 18px 13px 22px;
+      }
+
+      .home-kicker {
+        font-size: 9px;
+        letter-spacing: 2px;
+      }
+
+      .permission-blocker h2 {
+        font-size: 43px;
+      }
+
+      .home-subtitle {
+        margin: 10px 0 16px;
+        font-size: 12px;
+      }
+
+      .hunt-intro {
+        width: min(94vw, 390px);
+        padding: 16px 15px 15px;
+      }
+
+      .hunt-intro::before {
+        margin-top: -27px;
+        margin-bottom: 8px;
+      }
+
+      .hunt-intro h3 {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .hunt-intro p {
+        font-size: 11.3px;
+        line-height: 1.34;
+      }
+
+      .hunt-steps {
+        gap: 5px 8px;
+        padding: 8px 0 7px;
+      }
+
+      .hunt-steps li {
+        font-size: 9.8px;
+      }
+
+      .hunt-final {
+        font-size: 11px !important;
+        margin-top: 9px !important;
+      }
+
+      .permission-blocker #startBtn {
+        margin-top: 17px;
+        min-height: 47px;
+        padding: 12px 27px;
+        font-size: 15px;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .permission-blocker {
+        padding-top: 12px;
+        padding-bottom: 14px;
+      }
+
+      .home-subtitle {
+        margin-bottom: 12px;
+      }
+
+      .hunt-intro {
+        padding-top: 14px;
+        padding-bottom: 13px;
+      }
+
+      .permission-blocker #startBtn {
+        margin-top: 13px;
+      }
+    }
 
     /* ---- Grande animation de capture ---- */
     .capture-celebration {
@@ -850,6 +1084,7 @@
     .capture-celebration.show {
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
     }
 
     .capture-celebration-card {
@@ -963,6 +1198,111 @@
       font-weight: 800;
     }
 
+    /* ---- Lien "Mode d'emploi" et sa popup ---- */
+    .howto-link {
+      flex: 0 0 auto;
+      border: 1px solid rgba(143, 233, 79, .5);
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: rgba(143, 233, 79, .1);
+      color: var(--toxic);
+      font-weight: 800;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    .howto-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(7, 3, 15, .82);
+      backdrop-filter: blur(7px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
+
+    .howto-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .howto-card {
+      position: relative;
+      width: min(90vw, 420px);
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px 22px 24px;
+      border: 3px solid var(--toxic);
+      border-radius: 26px;
+      color: white;
+      background: linear-gradient(160deg, rgba(45, 27, 78, .98), rgba(18, 7, 33, .98));
+      box-shadow: 0 20px 70px rgba(0, 0, 0, .65), 0 0 30px rgba(143, 233, 79, .3);
+    }
+
+    .howto-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .12);
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .howto-card h2 {
+      margin: 0 0 14px;
+      font-family: 'Creepster', cursive;
+      font-weight: 400;
+      font-size: 28px;
+      color: var(--pumpkin);
+      text-shadow: 0 0 14px rgba(255, 138, 43, .5);
+      text-align: center;
+    }
+
+    .howto-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .howto-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .howto-step-icon {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: rgba(143, 233, 79, .15);
+      border: 1px solid rgba(143, 233, 79, .5);
+    }
+
+    .howto-step-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #e8def5;
+    }
+
+    .howto-step-text b {
+      color: var(--toxic);
+    }
+
     /* ---- Carnet du chasseur (fiche consultable) ---- */
     .monster-card-overlay {
       position: fixed;
@@ -977,11 +1317,13 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity .2s ease, visibility .2s ease;
+      pointer-events: none;
     }
 
     .monster-card-overlay.show {
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
     }
 
     .monster-card {
@@ -1000,14 +1342,25 @@
       position: absolute;
       top: 12px;
       right: 12px;
+      z-index: 10;
       width: 32px;
       height: 32px;
+      padding: 0;
       border: none;
       border-radius: 50%;
       background: rgba(255, 255, 255, .12);
       color: white;
       font-size: 16px;
       font-weight: 800;
+      line-height: 32px;
+      text-align: center;
+      cursor: pointer;
+      pointer-events: auto;
+      touch-action: manipulation;
+    }
+
+    .monster-card-close:hover {
+      background: rgba(255, 255, 255, .22);
     }
 
     .monster-card-emoji {
@@ -1188,13 +1541,61 @@
 <body>
 
   <div class="permission-blocker" id="blocker">
+    <div class="home-kicker">Une aventure vous attend dans le parc</div>
     <h2>🎃 Chasse aux Monstres</h2>
-    <p>Autorise la géolocalisation pour partir à la recherche des 12 monstres cachés dans le parc !</p>
-    <button id="startBtn">C'est parti !</button>
+    <p class="home-subtitle">Autorise la géolocalisation et pars à la recherche des 12 monstres cachés dans le parc.</p>
+
+    <div class="hunt-intro" aria-label="Comment fonctionne la chasse aux monstres ?">
+      <h3>🌙 La chasse commence ici…</h3>
+      <p>On raconte que <strong>12 créatures mystérieuses</strong> se sont échappées et se cachent quelque part dans le parc. Elles ne se laisseront pas attraper facilement !</p>
+      <p>Ton radar va t’aider à suivre leurs traces. Promène-toi, rapproche-toi des créatures et sois attentif : lorsque tu seras au bon endroit, ton appareil te permettra de partir à leur recherche.</p>
+
+      <ul class="hunt-steps">
+        <li>🔎 <strong>Trouve-les</strong></li>
+        <li>📡 <strong>Suis le radar</strong></li>
+        <li>📷 <strong>Repère-les avec la caméra</strong></li>
+        <li>👆 <strong>Tape sur le monstre pour le capturer</strong></li>
+        <li>📖 <strong>Découvre leurs secrets</strong></li>
+      </ul>
+
+      <p class="hunt-final">Arriveras-tu à tous les retrouver ? 👻</p>
+    </div>
+
+    <button id="startBtn">C’est parti !</button>
+  </div>
+
+  <div class="howto-overlay" id="howtoOverlay" aria-hidden="true">
+    <div class="howto-card" role="dialog" aria-modal="true" aria-labelledby="howtoTitle">
+      <button class="howto-close" id="howtoCloseBtn" aria-label="Fermer">✕</button>
+      <h2 id="howtoTitle">📖 Mode d'emploi</h2>
+      <div class="howto-steps">
+        <div class="howto-step">
+          <div class="howto-step-icon">🔎</div>
+          <div class="howto-step-text"><b>Trouve-les.</b> 12 créatures mystérieuses se cachent dans le parc. Promène-toi pour partir à leur recherche.</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-step-icon">📡</div>
+          <div class="howto-step-text"><b>Suis le radar.</b> En bas de l'écran, la jauge se remplit à mesure que tu te rapproches du monstre le plus proche.</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-step-icon">📷</div>
+          <div class="howto-step-text"><b>Repère-les avec la caméra.</b> Une fois assez proche, un bouton apparaît pour ouvrir la caméra et chercher le monstre autour de toi.</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-step-icon">👆</div>
+          <div class="howto-step-text"><b>Tape sur le monstre</b> plusieurs fois quand il apparaît à l'écran pour le capturer.</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-step-icon">📖</div>
+          <div class="howto-step-text"><b>Découvre ses secrets.</b> Chaque monstre capturé rejoint ton sac — tape dessus à tout moment pour relire sa fiche.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <header>
     <h1 id="gameTitle">Chasse aux <span>Monstres</span></h1>
+    <button class="howto-link" id="howtoLink" type="button">📖 Mode d'emploi</button>
     <div class="counter">🎃 <b id="caughtCount">0</b>/<span id="totalCount">12</span></div>
   </header>
 
@@ -1250,6 +1651,7 @@
 
   <div class="capture-celebration" id="captureCelebration" aria-hidden="true">
     <div class="capture-celebration-card">
+      <button type="button" class="monster-card-close" id="captureCelebrationCloseBtn" aria-label="Fermer">✕</button>
       <div class="celebration-kicker">🎉 Bravo ! 🎉</div>
       <div class="celebration-emoji" id="celebrationEmoji"></div>
       <div class="celebration-title">Monstre capturé !</div>
@@ -1262,7 +1664,7 @@
 
   <div class="monster-card-overlay" id="monsterCardOverlay" aria-hidden="true">
     <div class="monster-card">
-      <button class="monster-card-close" id="monsterCardCloseBtn" aria-label="Fermer">✕</button>
+      <button type="button" class="monster-card-close" id="monsterCardCloseBtn" aria-label="Fermer">✕</button>
       <div class="monster-card-emoji" id="monsterCardEmoji"></div>
       <div class="monster-card-name" id="monsterCardName"></div>
       <div class="monster-card-fact" id="monsterCardFact"></div>
@@ -1272,7 +1674,7 @@
 
   <div class="win-overlay" id="winOverlay">
     <h2>Bravo, chasseur de monstres !</h2>
-    <p id="winText">Tu as attrapé les 12 monstres du parc. Reviens voir les animateurs pour ta récompense 🍬</p>
+    <p id="winText">Tu as attrapé les 12 monstres. Reviens voir les animateurs pour ta récompense 🍬</p>
     <button id="openPhotoBtn">📸 Faire la photo souvenir</button>
     <button style="margin-top:10px;background:rgba(255,255,255,.13);color:white"
       onclick="document.getElementById('winOverlay').classList.remove('show')">Continuer à explorer</button>
@@ -1337,7 +1739,6 @@
       [47.8872253, 1.841964],
     ];
 
-
     // Centre moyen du polygone, utilisé pour centrer la carte.
     const CENTER = {
       lat: PARK_POLYGON.reduce((sum, point) => sum + point[0], 0) / PARK_POLYGON.length,
@@ -1346,8 +1747,8 @@
 
     // Le radar commence à réagir à 5 m. La caméra est débloquée à 10 m.
     // Évite de descendre à 2 m : la précision GPS d'un téléphone peut varier.
-    const RADAR_RADIUS_M = 10;
-    const CAMERA_UNLOCK_RADIUS_M = 15;
+    const RADAR_RADIUS_M = 20;
+    const CAMERA_UNLOCK_RADIUS_M = 25;
     const MIN_DISTANCE_BETWEEN_MONSTERS_M = 12; // Le vrai contour du parc fait ~110m de large, les monstres peuvent être mieux espacés
 
     // Ajoute une petite anecdote/fait rigolo par monstre avec "fact" —
@@ -1532,7 +1933,12 @@
         html: `<div class="monster-marker ${isCaught ? 'caught' : ''}" style="${isCaught ? '' : 'opacity:0'}">${monsterVisualHTML(m, 'marker-visual')}</div>`,
         iconSize: [56, 56]
       });
-      monsterMarkers[m.id] = L.marker([m.lat, m.lng], { icon }).addTo(map).bindPopup(m.name);
+      const marker = L.marker([m.lat, m.lng], {
+        icon,
+        interactive: isCaught
+      }).addTo(map);
+      if (isCaught) marker.bindPopup(m.name);
+      monsterMarkers[m.id] = marker;
     });
 
     // ---- Bag UI ----
@@ -1577,7 +1983,11 @@
       monsterCardOverlay.setAttribute('aria-hidden', 'true');
     }
 
-    document.getElementById('monsterCardCloseBtn').addEventListener('click', closeMonsterCard);
+    document.getElementById('monsterCardCloseBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeMonsterCard();
+    });
     monsterCardOverlay.addEventListener('click', (e) => {
       if (e.target === monsterCardOverlay) closeMonsterCard();
     });
@@ -1636,10 +2046,16 @@
       }, displayDuration);
     }
 
-    captureCelebration.addEventListener('click', () => {
+    function closeCaptureCelebration() {
       clearTimeout(celebrationTimer);
       captureCelebration.classList.remove('show');
       captureCelebration.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('captureCelebrationCloseBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeCaptureCelebration();
     });
 
     // ---- Radar, camera and capture logic ----
@@ -1970,9 +2386,10 @@
       photoOverlay.setAttribute('aria-hidden', 'false');
       photoCanvas.style.display = 'none';
       photoVideo.style.display = 'block';
+      photoOverlay.classList.remove('photo-captured');
       takePhotoBtn.hidden = false;
       takePhotoBtn.disabled = true;
-      takePhotoBtn.textContent = '📷 Préparation HD…';
+      takePhotoBtn.textContent = '📷 Préparation…';
       sharePhotoBtn.hidden = true;
       retakePhotoBtn.hidden = true;
       photoBlob = null;
@@ -2010,7 +2427,7 @@
         });
 
         takePhotoBtn.disabled = false;
-        takePhotoBtn.textContent = '📷 Prendre la photo HD';
+        takePhotoBtn.textContent = '📷 Prendre la photo';
       } catch (error) {
         console.warn('Caméra selfie indisponible', error);
         showToast('Caméra selfie indisponible. Vérifie son autorisation.');
@@ -2064,11 +2481,7 @@
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      ctx.save();
-      ctx.translate(outputWidth, 0);
-      ctx.scale(-1, 1);
       ctx.drawImage(source, 0, 0, outputWidth, outputHeight);
-      ctx.restore();
       source.close?.();
 
       const scale = Math.max(1, outputWidth / 900);
@@ -2084,33 +2497,49 @@
       ctx.shadowColor = 'rgba(0,0,0,.95)';
       ctx.shadowBlur = 10 * scale;
       ctx.shadowOffsetY = 3 * scale;
+
+      // En-tête : petit logo de l'association à côté du titre, en haut de la photo.
+      const titleFontSize = Math.round(48 * scale);
+      ctx.font = `${titleFontSize}px Creepster, cursive`;
+      const title = 'Chasseur de monstres';
+      const titleWidth = ctx.measureText(title).width;
+      const logoMaxWidth = outputWidth * 0.095;
+      const logoMaxHeight = 62 * scale;
+      let logoWidth = 0;
+      let logoHeight = 0;
+      if (associationLogoImage) {
+        const logoRatio = Math.min(
+          logoMaxWidth / associationLogoImage.width,
+          logoMaxHeight / associationLogoImage.height
+        );
+        logoWidth = associationLogoImage.width * logoRatio;
+        logoHeight = associationLogoImage.height * logoRatio;
+      }
+      const logoGap = 16 * scale;
+      const headerWidth = titleWidth + (logoWidth ? logoGap + logoWidth : 0);
+      const headerX = Math.max(20 * scale, (outputWidth - headerWidth) / 2);
+      const titleX = headerX + (logoWidth ? logoWidth + logoGap : 0);
+
       ctx.fillStyle = '#ffb35c';
-      ctx.font = `${Math.round(48 * scale)}px Creepster, cursive`;
-      ctx.fillText('Chasseur de monstres', outputWidth / 2, 78 * scale);
+      ctx.fillText(title, titleX + titleWidth / 2, 78 * scale);
+
+      if (associationLogoImage && logoWidth > 0 && logoHeight > 0) {
+        const logoX = headerX;
+        const logoY = 28 * scale;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,.75)';
+        ctx.shadowBlur = 7 * scale;
+        ctx.drawImage(associationLogoImage, logoX, logoY, logoWidth, logoHeight);
+        ctx.restore();
+      }
+
       ctx.fillStyle = '#ffffff';
       ctx.font = `800 ${Math.round(21 * scale)}px Nunito, sans-serif`;
-      ctx.fillText('Halloween 2026 · 12/12 monstres', outputWidth / 2, 112 * scale);
+      ctx.fillText(`Halloween 2026 · ${MONSTERS.length}/${MONSTERS.length} monstres`, outputWidth / 2, 112 * scale);
       ctx.font = `${Math.round(45 * scale)}px sans-serif`;
       ctx.fillText('🎃  👻  🦇  🕷️  💀  🧛', outputWidth / 2, outputHeight - 54 * scale);
       ctx.shadowBlur = 0;
       ctx.shadowOffsetY = 0;
-
-      if (associationLogoImage) {
-        const maxLogoWidth = outputWidth * 0.22;
-        const maxLogoHeight = outputHeight * 0.12;
-        const logoRatio = Math.min(maxLogoWidth / associationLogoImage.width, maxLogoHeight / associationLogoImage.height);
-        const logoWidth = associationLogoImage.width * logoRatio;
-        const logoHeight = associationLogoImage.height * logoRatio;
-        const logoMargin = 20 * scale;
-        const logoX = outputWidth - logoWidth - logoMargin;
-        const logoY = outputHeight - logoHeight - logoMargin;
-
-        ctx.save();
-        ctx.shadowColor = 'rgba(0,0,0,.7)';
-        ctx.shadowBlur = 8 * scale;
-        ctx.drawImage(associationLogoImage, logoX, logoY, logoWidth, logoHeight);
-        ctx.restore();
-      }
 
       photoBlob = await new Promise((resolve, reject) => {
         canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Export impossible')), 'image/jpeg', 0.98);
@@ -2154,19 +2583,26 @@
           });
         }
 
+        await associationLogoReady;
         const size = await renderSouvenirFromRaw();
+
+        // Après la prise de vue, on affiche directement le souvenir final
+        // rendu dans le canvas : photo + cadre + titre + logo + décorations.
+        // Les éléments de l'interface (cadre HTML, titre et monstres) sont masqués
+        // pour éviter tout chevauchement : tout ce qui doit apparaître sur la photo
+        // est déjà intégré au canvas.
         stopPhotoStream();
         photoVideo.style.display = 'none';
         photoCanvas.style.display = 'block';
+        photoOverlay.classList.add('photo-captured');
         takePhotoBtn.hidden = true;
         retakePhotoBtn.hidden = false;
         sharePhotoBtn.hidden = false;
-        showToast(`Photo HD créée : ${size.outputWidth} × ${size.outputHeight}`);
       } catch (error) {
         console.warn('Création de la photo impossible', error);
         showToast('Impossible de créer la photo. Réessaie.');
         takePhotoBtn.disabled = false;
-        takePhotoBtn.textContent = '📷 Prendre la photo HD';
+        takePhotoBtn.textContent = '📷 Prendre la photo';
       }
     }
 
@@ -2175,11 +2611,12 @@
       photoBlob = null;
       photoCanvas.style.display = 'none';
       photoVideo.style.display = 'block';
+      photoOverlay.classList.remove('photo-captured');
       retakePhotoBtn.hidden = true;
       sharePhotoBtn.hidden = true;
       takePhotoBtn.hidden = false;
       takePhotoBtn.disabled = true;
-      takePhotoBtn.textContent = '📷 Préparation HD…';
+      takePhotoBtn.textContent = '📷 Préparation…';
 
       try {
         photoStream = await navigator.mediaDevices.getUserMedia({
@@ -2195,7 +2632,7 @@
         photoVideo.srcObject = photoStream;
         await photoVideo.play();
         takePhotoBtn.disabled = false;
-        takePhotoBtn.textContent = '📷 Prendre la photo HD';
+        takePhotoBtn.textContent = '📷 Prendre la photo';
       } catch (error) {
         console.warn(error);
         showToast('Impossible de rouvrir la caméra.');
@@ -2206,7 +2643,7 @@
       if (!photoBlob) return;
       const file = new File([photoBlob], 'photo-chasse-aux-monstres.jpg', { type: 'image/jpeg' });
       try {
-        if (navigator.canShare?.({ files: [file] })) await navigator.share({ title: 'Chasse aux Monstres', text: 'J’ai capturé les 12 monstres !', files: [file] });
+        if (navigator.canShare?.({ files: [file] })) await navigator.share({ title: 'Chasse aux Monstres', text: `J’ai capturé les ${MONSTERS.length} monstres !`, files: [file] });
         else {
           const link = document.createElement('a'); link.href = URL.createObjectURL(photoBlob); link.download = file.name; link.click();
           setTimeout(() => URL.revokeObjectURL(link.href), 1000);
@@ -2225,13 +2662,22 @@
     // CONFIG en haut du fichier) et appliqué à chaque photo souvenir, sans
     // aucune action des familles pendant l'événement.
     let associationLogoImage = null;
+    let associationLogoReady = Promise.resolve(null);
 
     (function loadAssociationLogo() {
       if (!ASSOCIATION_LOGO_URL) return;
-      const img = new Image();
-      img.onload = () => { associationLogoImage = img; };
-      img.onerror = () => { console.info('Logo association introuvable à', ASSOCIATION_LOGO_URL); };
-      img.src = ASSOCIATION_LOGO_URL;
+      associationLogoReady = new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          associationLogoImage = img;
+          resolve(img);
+        };
+        img.onerror = () => {
+          console.info('Logo association introuvable à', ASSOCIATION_LOGO_URL);
+          resolve(null);
+        };
+        img.src = ASSOCIATION_LOGO_URL;
+      });
     })();
 
 
@@ -2365,6 +2811,27 @@
     });
 
     document.getElementById('startBtn').addEventListener('click', startTracking);
+
+    // ---- Popup "Mode d'emploi" ----
+    const howtoLink = document.getElementById('howtoLink');
+    const howtoOverlay = document.getElementById('howtoOverlay');
+    const howtoCloseBtn = document.getElementById('howtoCloseBtn');
+
+    function openHowto() {
+      howtoOverlay.classList.add('show');
+      howtoOverlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeHowto() {
+      howtoOverlay.classList.remove('show');
+      howtoOverlay.setAttribute('aria-hidden', 'true');
+    }
+
+    howtoLink.addEventListener('click', openHowto);
+    howtoCloseBtn.addEventListener('click', closeHowto);
+    howtoOverlay.addEventListener('click', event => {
+      if (event.target === howtoOverlay) closeHowto();
+    });
   </script>
 </body>
 
